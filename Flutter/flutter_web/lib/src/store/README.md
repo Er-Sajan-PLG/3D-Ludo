@@ -1,0 +1,1 @@
+Store module placeholder for Flutter Web.

@@ -1,0 +1,1 @@
+Friends module placeholder for Flutter Web.

@@ -139,6 +139,20 @@ Run basic functionality test:
 python test_basic.py
 ```
 
+### Python Backend
+
+A FastAPI backend is available under `backend/main.py` and exposes the engine game state via:
+
+- `GET /api/game`
+- `POST /api/game` with JSON `{ "action": "play_turn" }`
+
+Start the backend locally with:
+```bash
+uvicorn backend.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+The Next.js frontend proxies requests through `webapp/pages/api/game.ts` to this backend.
+
 ## Configuration
 
 The game uses JSON configuration files for:

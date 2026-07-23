@@ -1,0 +1,1 @@
+Inventory module placeholder for Flutter Web.

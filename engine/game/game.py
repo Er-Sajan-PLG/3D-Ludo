@@ -14,7 +14,7 @@ from enum import Enum
 from dataclasses import dataclass
 
 from .board import Board
-from .pieces import Pieces
+from .pieces import Pieces, PieceType, PieceColor
 from .dice import Dice
 from .players import Players
 from engine.systems import SoundSystem
@@ -93,11 +93,28 @@ class Game:
                 )
                 self.players.append(player)
 
+            # Create player pieces so the turn logic works.
+            starting_pieces = self.gameplay_config.get('starting_pieces', 4)
+            piece_colors = [PieceColor.RED, PieceColor.BLUE, PieceColor.GREEN, PieceColor.YELLOW]
+            for player in self.players:
+                color = piece_colors[player.player_id % len(piece_colors)]
+                for piece_index in range(starting_pieces):
+                    piece_id = player.player_id * 10 + piece_index
+                    self.pieces.create_piece(
+                        piece_id=piece_id,
+                        piece_type=PieceType.CLASSIC,
+                        color=color,
+                        player_id=player.player_id
+                    )
+                    player.add_piece(piece_id)
+
             # Setup board with player pieces
             self.board.setup_board(self.players, self.pieces)
 
             # Start first player's turn
             self.current_player = self.players[0]
+            self.current_player.is_turn = True
+            self.current_turn = 1
             self.state = GameState.PLAYING
             self.turn_start_time = time.time()
 
@@ -156,41 +173,52 @@ class Game:
         """
         moved_pieces = []
         dice_result = self.dice.last_roll
+        selected_piece = None
 
+        # Prefer an explicitly selected piece.
         for piece_id in self.current_player.get_pieces():
-            piece = self.pieces.get_piece_by_id(piece_id) # Retrieve the actual Piece object
-            if piece and piece.can_move() and not piece.is_selected:
-                continue
+            piece = self.pieces.get_piece_by_id(piece_id)
+            if piece and piece.is_selected and piece.can_move():
+                selected_piece = piece
+                break
 
-            target_position = piece.calculate_target_position(dice_result) if piece else None
-            if piece and target_position is not None and self.board.is_valid_position(target_position):
-                # Animate piece movement
-                self.animation_system.animate_piece_movement(piece, target_position)
+        # Fall back to the first available movable piece.
+        if not selected_piece:
+            for piece_id in self.current_player.get_pieces():
+                piece = self.pieces.get_piece_by_id(piece_id)
+                if piece and piece.can_move():
+                    selected_piece = piece
+                    break
 
-                # Move piece
-                old_position = piece.position
-                piece.position = target_position
+        if not selected_piece:
+            return moved_pieces
 
-                # Check for special positions (safe zones, ladders, etc.)
-                self.apply_position_effects(piece)
+        target_position = selected_piece.calculate_target_position(dice_result)
+        if selected_piece and target_position is not None and self.board.is_valid_position(target_position):
+            # Animate piece movement
+            self.animation_system.animate_piece_movement(selected_piece, target_position)
 
-                # Check for capture
-                captured_piece = self.check_capture(piece)
-                if captured_piece:
-                    self.pieces.capture_piece(captured_piece)
-                    self.sound_system.play_sound('capture')
+            # Move piece
+            old_position = selected_piece.position
+            selected_piece.position = target_position
 
-                # Log move
-                self.log_move(piece, old_position, target_position, captured_piece)
+            # Check for special positions (safe zones, ladders, etc.)
+            self.apply_position_effects(selected_piece)
 
-                moved_pieces.append(piece)
-                self.on_piece_moved(piece, target_position)
+            # Check for capture
+            captured_piece = self.check_capture(selected_piece)
+            if captured_piece:
+                self.pieces.capture_piece(captured_piece)
+                self.sound_system.play_sound('capture')
 
-                # Break if piece reached the end path
-                if self.board.is_safe_position(target_position):
-                    piece.reached_end = True
+            # Log move
+            self.log_move(selected_piece, old_position, target_position, captured_piece)
 
-                break  # Only one piece can move per turn
+            moved_pieces.append(selected_piece)
+            self.on_piece_moved(selected_piece, target_position)
+
+            if self.board.is_safe_position(target_position):
+                selected_piece.reached_end = True
 
         return moved_pieces
 
@@ -250,9 +278,14 @@ class Game:
 
     def next_turn(self) -> None:
         """Switch to the next player's turn."""
+        if self.current_player:
+            self.current_player.is_turn = False
+
         current_index = self.players.index(self.current_player)
         next_index = (current_index + 1) % len(self.players)
         self.current_player = self.players[next_index]
+        self.current_player.is_turn = True
+        self.current_turn += 1
 
         # Update turn timer
         turn_time = time.time() - self.turn_start_time

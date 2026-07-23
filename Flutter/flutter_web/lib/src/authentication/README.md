@@ -1,0 +1,1 @@
+Authentication module placeholder for Flutter Web (implement OAuth, providers, etc.)

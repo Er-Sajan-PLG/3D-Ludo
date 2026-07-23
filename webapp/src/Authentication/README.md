@@ -1,1 +1,0 @@
-Authentication module placeholder. OAuth, sessions, and UI logic go here.
