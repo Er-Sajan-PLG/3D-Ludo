@@ -1,0 +1,1 @@
+Engine integration notes. For Unity, export WebGL builds and host alongside Flutter web or integrate via iframe.

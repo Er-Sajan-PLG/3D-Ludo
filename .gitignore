@@ -1,1 +1,82 @@
-Nothing should be ignored since the changes only include source code files (.py) and no build artifacts, dependencies, or temporary files.
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.env
+.env.*
+
+# Python package manager
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+
+# Distribution / packaging
+build/
+dist/
+*.egg
+*.whl
+
+# PyCharm
+.idea/
+
+# VS Code
+.vscode/
+
+# Unity
+unity/Library/
+unity/Temp/
+unity/Obj/
+unity/Build/
+unity/Builds/
+unity/Logs/
+unity/MemoryCaptures/
+unity/Packages/manifest.json
+unity/Packages/packages-lock.json
+unity/ProjectSettings/ProjectSettings.asset
+unity/ProjectSettings/ProjectVersion.txt
+unity/*.csproj
+unity/*.sln
+unity/*.user
+unity/*.pidb
+unity/*.booproj
+unity/*.svd
+unity/*.pdb
+
+# macOS
+.DS_Store
+
+# Linux
+*.swp
+*~
+
+# npm
+node_modules/
+package-lock.json
+npm-debug.log*
+
+# Next.js
+.next/
+out/
+
+# Logs
+*.log
+
+# Backup files
+*.bak
+*.tmp
+
+# Ignore engine-specific caches
+**/__pycache__/
+*.pyc
+
+# Ignore local test outputs
+coverage/
+htmlcov/
+pytest_cache/
+
+# Ignore system files
+Thumbs.db
+ehthumbs.db
