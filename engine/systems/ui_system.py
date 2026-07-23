@@ -477,23 +477,67 @@ class UISystem:
         if not self.is_enabled:
             return
 
-        # UI rendering is handled by the engine frontend or fallback renderer.
-        return
+        # Try pygame font rendering for debug visualization
+        try:
+            import pygame
+            # Render buttons
+            for button in self.buttons.values():
+                color = button.get('color', (100, 100, 100))
+                rect = button.get('rect')
+                if rect:
+                    pygame.draw.rect(screen, color, rect)
+                    # Draw button text if available
+                    if 'text' in button:
+                        font = pygame.font.Font(None, 24)
+                        text_surf = font.render(button['text'], True, (255, 255, 255))
+                        text_rect = text_surf.get_rect(center=rect.center)
+                        screen.blit(text_surf, text_rect)
+            
+            # Render labels
+            for label in self.labels.values():
+                text = label.get('text', '')
+                pos = label.get('position', (0, 0))
+                color = label.get('color', (255, 255, 255))
+                font = pygame.font.Font(None, 24)
+                text_surf = font.render(text, True, color)
+                screen.blit(text_surf, pos)
+        except:
+            pass
 
     def render_turn_info(self, screen, current_player, game_state: Dict[str, Any]) -> None:
         """Render turn information on screen."""
         if not self.is_enabled:
             return
 
-        # Placeholder: in a real implementation, this would draw labels.
-        return
+        try:
+            import pygame
+            # Display current player and dice roll
+            font = pygame.font.Font(None, 36)
+            player_name = current_player.name if current_player else "Unknown"
+            dice_roll = game_state.get('last_roll', 0)
+            
+            text = f"Turn: {player_name} | Dice: {dice_roll}"
+            text_surf = font.render(text, True, (255, 255, 255))
+            screen.blit(text_surf, (10, 10))
+        except:
+            pass
 
     def render_score(self, screen, players) -> None:
         """Render player scores on screen."""
         if not self.is_enabled:
             return
 
-        return
+        try:
+            import pygame
+            font = pygame.font.Font(None, 28)
+            y_offset = 50
+            for player in players:
+                score_text = f"{player.name}: {player.score}"
+                text_surf = font.render(score_text, True, (200, 200, 200))
+                screen.blit(text_surf, (10, y_offset))
+                y_offset += 30
+        except:
+            pass
 
     def cleanup(self) -> None:
         """Cleanup UI resources."""

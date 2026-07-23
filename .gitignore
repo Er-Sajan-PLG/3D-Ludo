@@ -1,256 +1,39 @@
-# Python
+```
+# Compiled Python files
+*.pyc
 __pycache__/
-*.py[cod]
-*$py.class
-*.so
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-local/
-cmake-build/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
 
-# Environment
-.env
-.venv
-env/
+# Virtual environments
 venv/
-ENV/
-env.bak/
+.venv/
+.env
+.env.local
+*.env.*
 
-# IDE
+# Logs
+*.log
+
+# Editor/IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
-*~
+*.tmp
 
-# OS
-.DS_Store
-Thumbs.db
-
-# Game specific
-*.log
-*.save
-
-# Build artifacts
+# Dependencies and build artifacts
+node_modules/
+build/
+dist/
 *.o
 *.obj
-*.exe
-*.dll
-*.so
-*.dylib
-*.zip
-*.tar.gz
-*.rar
+*.out
 
-# VSCode Search Results
-.vscode-search-results.json
-
-# Distribution / packaging
-.Python
-build/
-develop-eggs/
-dist/
-downloads/
-eggs/
-.eggs/
-lib/
-lib64/
-local/
-cmake-build/
-*.egg-info/
-.installed.cfg
-*.egg
-MANIFEST
-flatpakbuilder/
-
-# PyInstaller
-*.manifest
-*.spec
-
-# Installer logs
-pip-log.txt
-pip-delete-this-directory.txt
-*egg-info/
-.installed.cfg
-*.egg
-
-# Unit test / coverage reports
+# Coverage reports
+coverage/
 htmlcov/
-.tox/
-.nox/
 .coverage
-.coverage.*
+
+# Testing
 .pytest_cache/
-coverage_html_report/
-
-# Jupyter Notebook
-.ipynb_checkpoints
-
-# pyenv
-.python-version
-
-# PEP 582; used by pyright/pdm
-__pythongsobj__/
-
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
-# Environments
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
-
-# mkdocs documentation
-/site
-
-doc/
-
-# mypy
 .mypy_cache/
-.dmypy.json
-dmypy.json
-
-# Pyre type checker
-.pyre/
-
-# pytype static type analyzer
-.pytype/
-
-# Cython debug symbols
-cython_debug/
-
-# Platform-specific files
-.android
-ios/
-mac/
-windows/
-
-# Configuration files
-*.ini
-*.cfg
-*.yml
-*.yaml
-*.toml
-*.lock
-# Keep game data and config JSON files
-!config/*.json
-!data/*.json
-
-# Temporary files
-*.tmp
-*.temp
-*.log
-*.bak
-*.swp
-*.swo
-
-# Binary files
-*.bin
-*.dat
-*.db
-*.sqlite
-*.sqlite3
-# Keep assets
-!assets/**/*
-
-# Xcode
-*.xcuserdata
-
-# tmux
-tmux-session-name
-
-# Ruby
-*.gem
-
-# Node
-*.log
-*.pid
-*.sublime-project
-*.sublime-workspace
-
-# Ruby and Python ignore everything in these directories
-*/site-packages/
-*/pycache/
-*/__pycache__/
-*/.pytest_cache/
-*/.ruff_cache/
-*/.mypy_cache/
-*/.coverage
-*/htmlcov/
-*/.tox/
-*/.nox/
-*/.ruff/
-
-# MAC
-.DS_Store
-
-# Windows
-setup.exe
-*.exe
-*.pdb
-
-# Check for credentials
-git-secrets-key
-git-secrets-data
-
-# IntelliJ
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/plugins.xml
-.idea/encodings.xml
-.idea/modules.xml
-.idea/assetFolders.xml
-idea/misc.xml
-.idea/dictionaries
-.idea/gradle.xml
-.idea/copyright/workspaceSettings.xml
-.idea/dataSources.local.xml
-.idea/dataSources.xml
-.idea/databaseSettings.xml
-.idea/httpRequestsSettings.xml
-.idea/macro.config.xml
-.idea.maven.config.xml
-.idea/markdownPlugin.xml
-.idea/modules.xml
-.idea/more-settings.xml
-.idea.palette.xml
-idea/pluginXmlPaths.xml
-idea/plugins.xml
-idea/scopes/bundled.xml
-.idea/printer_settings.xml
-.idea/profiles_settings.xml
-.idea.project.view.png
-idea/recentProjects.xml
-.idea/runConfigurations.xml
-.idea/uiDesigner.xml
-.idea/vcs.xml
-.idea/misc.xml
-.idea/modules.xml
-.idea.copyright.workspace.xml
-.idea/workspace.name
-touch
+```
