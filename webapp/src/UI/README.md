@@ -1,0 +1,1 @@
+UI module placeholder for web frontend. Implement React/Vue/Flutter Web components here.

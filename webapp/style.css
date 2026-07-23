@@ -1,0 +1,6 @@
+*{box-sizing:border-box;font-family:Inter,system-ui,Arial;background:#f6f8fa}
+#app{max-width:1000px;margin:24px auto;padding:16px;background:#fff;border-radius:8px;box-shadow:0 6px 18px rgba(10,10,10,0.06)}
+nav{display:flex;gap:8px;margin-bottom:16px}
+nav a{padding:8px 12px;background:#eef2ff;color:#1f2937;border-radius:6px;text-decoration:none}
+nav a.active{background:#6366f1;color:#fff}
+main{min-height:320px;padding:12px}

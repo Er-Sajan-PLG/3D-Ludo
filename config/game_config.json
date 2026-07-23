@@ -1,0 +1,147 @@
+{
+  "game": {
+    "title": "3D Ludo",
+    "version": "1.0.0",
+    "developer": "3D Ludo Team",
+    "description": "A simple and modular 3D Ludo game",
+    "website": "https://3dludo.example.com",
+    "support_email": "support@3dludo.example.com"
+  },
+  "graphics": {
+    "renderer": "opengl",
+    "window_width": 1920,
+    "window_height": 1080,
+    "fullscreen": false,
+    "vsync": true,
+    "frame_rate": 60,
+    "shadow_quality": "high",
+    "texture_quality": "high",
+    "particle_quality": "high",
+    "anti_aliasing": "fxaa",
+    "bloom": true,
+    "tone_mapping": " Reinhard"
+  },
+  "audio": {
+    "enabled": true,
+    "volume": 0.7,
+    "music_volume": 0.5,
+    "sound_effects_volume": 0.8,
+    "master_volume": 1.0,
+    "audio_api": "pygame",
+    "output_device": "default",
+    "format": "pcm",
+    "channels": 2,
+    "sample_rate": 44100
+  },
+  "input": {
+    "mouse_sensitivity": 1.0,
+    "keyboard_layout": "qwerty",
+    "controller_enabled": true,
+    "controller_deadzone": 0.2,
+    "virtual_joystick": false,
+    "camera_sensitivity": 1.0
+  },
+  "gameplay": {
+    "board_type": "classic",
+    "board_size": "standard",
+    "num_players": 4,
+    "time_per_turn": 30,
+    "starting_pieces": 4,
+    "allow_jumping": false,
+    "safe_zones_enabled": true,
+    "capture_rules": "normal",
+    "dice_type": "classic",
+    "require_login": true,
+    "multiplayer_enabled": true,
+    "lobby_timeout": 60,
+    "game_timeout": 0
+  },
+  "sound_system": {
+    "enabled": true,
+    "music_tracks": [],
+    "sound_effects": [],
+    "ambience_tracks": [],
+    "spatial_audio": false,
+    "reverb_enabled": false,
+    "audio_compression": "mp3"
+  },
+  "animation_system": {
+    "enabled": true,
+    "animation_speed": 1.0,
+    "particle_system_enabled": true,
+    "particle_quality": "medium",
+    "max_animations": 20,
+    "animation_cleanup_interval": 5.0
+  },
+  "ui_system": {
+    "enabled": true,
+    "theme": "light",
+    "font_size_multiplier": 1.0,
+    "animation_speed": 1.0,
+    "screen_width": 1920,
+    "screen_height": 1080,
+    "sound_enabled": true
+  },
+  "game_modes": {
+    "enabled": true,
+    "initial_mode": "classic",
+    "available_modes": [
+      "classic",
+      "speed",
+      "reverse",
+      "team",
+      "cooperative",
+      "battle_royale",
+      "time_attack",
+      "match_stops"
+    ]
+  },
+  "login_system": {
+    "enabled": true,
+    "require_login": true,
+    "providers": [
+      "local"
+    ],
+    "session_duration": 86400,
+    "max_failed_login_attempts": 5,
+    "account_lockout_duration": 3600,
+    "session_cleanup_interval": 3600,
+    "password_reset_cleanup_interval": 86400,
+    "require_email_verification": false
+  },
+  "microtransactions": {
+    "enabled": true,
+    "payment_provider": "stripe",
+    "currencies_enabled": [
+      "coins",
+      "gems",
+      "diamonds",
+      "renown"
+    ],
+    "taxes_enabled": true,
+    "tax_rate": 0.1
+  },
+  "data": {
+    "data_directory": "data",
+    "save_directory": "saves",
+    "backup_directory": "backups",
+    "auto_save_interval": 300,
+    "max_save_files": 10
+  },
+  "debug": {
+    "enabled": false,
+    "log_level": "INFO",
+    "show_fps": true,
+    "show_debug_info": true,
+    "profile_performance": false,
+    "visualize_colliders": false,
+    "test_mode": false
+  },
+  "development": {
+    "hot_reload": false,
+    "debug_mode": true,
+    "live_reload": false,
+    "watch_assets": true,
+    "compile_on_startup": true
+  }
+}
