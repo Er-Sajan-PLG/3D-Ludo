@@ -618,13 +618,16 @@ class Board:
                     x, y, z = pos_info['coordinates']
                     color = self._get_position_color(pos_info)
                     # Convert OpenGL coords to screen coords (approximate)
-                    screen_x = int((x + 10) * 20 + 100)
-                    screen_y = int((z + 10) * 20 + 100)
+                    screen_x = int((x + 2) * 40 + 400)
+                    screen_y = int((z + 2) * 40 + 300)
                     
-                    # Draw position marker
+                    # Draw position marker - filled rectangle with border
                     rect = pygame.Rect(screen_x, screen_y, cell_size, cell_size)
-                    pygame.draw.rect(screen, [int(c * 255) for c in color], rect, 2)
-        except:
+                    color_int = [int(c * 255) for c in color]
+                    pygame.draw.rect(screen, color_int, rect, 0)  # Filled
+                    pygame.draw.rect(screen, [min(c+50, 255) for c in color_int], rect, 2)  # Border
+        except Exception as e:
+            print(f"Error rendering classic path: {e}")
             # Fallback to OpenGL rendering
             glPointSize(5.0)
             glBegin(GL_POINTS)

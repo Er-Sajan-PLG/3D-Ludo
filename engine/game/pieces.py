@@ -526,9 +526,9 @@ class Pieces:
             # Get piece position coordinates from board
             pos_coords = piece.board.get_position_coordinates(piece.position) if piece.board else (0, 0, 0)
             
-            # Convert to screen coordinates
-            screen_x = int((pos_coords[0] + 10) * 20 + 110)
-            screen_y = int((pos_coords[2] + 10) * 20 + 110)
+            # Convert to screen coordinates - matching board rendering
+            screen_x = int((pos_coords[0] + 2) * 40 + 407)  # Centered in cell
+            screen_y = int((pos_coords[2] + 2) * 40 + 307)  # Centered in cell
             
             # Draw piece as colored circle based on player color
             color_map = {
@@ -539,13 +539,15 @@ class Pieces:
             }
             color = color_map.get(piece.color, (255, 255, 255))
             
-            pygame.draw.circle(screen, color, (screen_x, screen_y), 8)
+            # Draw larger piece
+            pygame.draw.circle(screen, color, (screen_x, screen_y), 10)
             
             # Add border for selected pieces
             if piece.is_selected:
-                pygame.draw.circle(screen, (255, 255, 255), (screen_x, screen_y), 10, 2)
+                pygame.draw.circle(screen, (255, 255, 255), (screen_x, screen_y), 12, 3)
                 
         except Exception as e:
+            print(f"Error rendering piece: {e}")
             # Fallback to OpenGL rendering
             # Enable texturing
             glEnable(GL_TEXTURE_2D)

@@ -48,6 +48,29 @@ class Main:
             height = graphics_config.get('window_height', 600)
             self.screen = pygame.display.set_mode((width, height), pygame.OPENGL | pygame.DOUBLEBUF)
 
+            # Initialize OpenGL viewport and projection
+            from OpenGL.GL import glViewport, glEnable, glClearColor, glClearDepth, GL_DEPTH_TEST
+            from OpenGL.GLU import gluPerspective
+            glViewport(0, 0, width, height)
+            glEnable(GL_DEPTH_TEST)
+            glClearColor(0.1, 0.1, 0.1, 1.0)  # Dark gray background
+            glClearDepth(1.0)
+            
+            # Set up projection matrix
+            from OpenGL.GL import glMatrixMode, glLoadIdentity, GL_PROJECTION, GL_MODELVIEW
+            from OpenGL.GLU import gluPerspective
+            glMatrixMode(GL_PROJECTION)
+            glLoadIdentity()
+            gluPerspective(45, width / height, 0.1, 100.0)
+            
+            # Set up modelview matrix
+            glMatrixMode(GL_MODELVIEW)
+            glLoadIdentity()
+            from OpenGL.GLU import gluLookAt
+            gluLookAt(0, 20, 20,  # Camera position
+                     0, 0, 0,     # Look at origin
+                     0, 1, 0)     # Up vector
+
             # Initialize game
             if not self.initialize():
                 print("Failed to initialize game")
