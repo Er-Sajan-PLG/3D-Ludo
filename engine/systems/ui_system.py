@@ -511,16 +511,22 @@ class UISystem:
 
         try:
             import pygame
-            # Display current player and dice roll
-            font = pygame.font.Font(None, 36)
+            # Display current player and dice roll with larger font
+            font = pygame.font.Font(None, 48)
             player_name = current_player.name if current_player else "Unknown"
             dice_roll = game_state.get('last_roll', 0)
             
             text = f"Turn: {player_name} | Dice: {dice_roll}"
             text_surf = font.render(text, True, (255, 255, 255))
             screen.blit(text_surf, (10, 10))
-        except:
-            pass
+            
+            # Add instructions
+            small_font = pygame.font.Font(None, 28)
+            instr_text = "Press SPACE to roll dice"
+            instr_surf = small_font.render(instr_text, True, (200, 200, 200))
+            screen.blit(instr_surf, (10, 60))
+        except Exception as e:
+            print(f"Error rendering turn info: {e}")
 
     def render_score(self, screen, players) -> None:
         """Render player scores on screen."""
@@ -529,15 +535,14 @@ class UISystem:
 
         try:
             import pygame
-            font = pygame.font.Font(None, 28)
-            y_offset = 50
-            for player in players:
-                score_text = f"{player.name}: {player.score}"
+            font = pygame.font.Font(None, 32)
+            y_offset = 580  # Bottom of screen
+            for i, player in enumerate(players):
+                score_text = f"{player.name}: Score {player.score}"
                 text_surf = font.render(score_text, True, (200, 200, 200))
-                screen.blit(text_surf, (10, y_offset))
-                y_offset += 30
-        except:
-            pass
+                screen.blit(text_surf, (10 + i * 200, y_offset))
+        except Exception as e:
+            print(f"Error rendering score: {e}")
 
     def cleanup(self) -> None:
         """Cleanup UI resources."""
