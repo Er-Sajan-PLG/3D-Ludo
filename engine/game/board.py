@@ -603,18 +603,41 @@ class Board:
         """Render classic board paths."""
         # This would normally use OpenGL to render path geometry
         # For simplicity, we'll just draw simple markers at each position
-        glPointSize(5.0)
-        glBegin(GL_POINTS)
-
-        for track in range(4):
-            for pos_id, pos_info in self.positions.items():
-                if pos_info['track'] == track:
+        try:
+            import pygame
+            # Draw colored rectangles for each position on the board
+            cell_size = 15  # pixels per cell
+            spacing = 20    # spacing between cells
+            
+            # Draw a visible grid pattern for the classic board
+            for track in range(4):
+                track_positions = [pos for pos_id, pos in self.positions.items() if pos['track'] == track]
+                
+                # Arrange positions in a visible pattern
+                for idx, pos_info in enumerate(track_positions[:13]):  # Show first 13 positions per track
                     x, y, z = pos_info['coordinates']
                     color = self._get_position_color(pos_info)
-                    glColor3f(*color)
-                    glVertex3f(x, y, z)
+                    # Convert OpenGL coords to screen coords (approximate)
+                    screen_x = int((x + 10) * 20 + 100)
+                    screen_y = int((z + 10) * 20 + 100)
+                    
+                    # Draw position marker
+                    rect = pygame.Rect(screen_x, screen_y, cell_size, cell_size)
+                    pygame.draw.rect(screen, [int(c * 255) for c in color], rect, 2)
+        except:
+            # Fallback to OpenGL rendering
+            glPointSize(5.0)
+            glBegin(GL_POINTS)
 
-        glEnd()
+            for track in range(4):
+                for pos_id, pos_info in self.positions.items():
+                    if pos_info['track'] == track:
+                        x, y, z = pos_info['coordinates']
+                        color = self._get_position_color(pos_info)
+                        glColor3f(*color)
+                        glVertex3f(x, y, z)
+
+            glEnd()
 
     def _render_circular_path(self, screen) -> None:
         """Render circular board paths."""

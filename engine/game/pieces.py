@@ -521,14 +521,40 @@ class Pieces:
             piece: The piece to render
             screen: The rendering surface
         """
-        # Enable texturing
-        glEnable(GL_TEXTURE_2D)
+        try:
+            import pygame
+            # Get piece position coordinates from board
+            pos_coords = piece.board.get_position_coordinates(piece.position) if piece.board else (0, 0, 0)
+            
+            # Convert to screen coordinates
+            screen_x = int((pos_coords[0] + 10) * 20 + 110)
+            screen_y = int((pos_coords[2] + 10) * 20 + 110)
+            
+            # Draw piece as colored circle based on player color
+            color_map = {
+                PieceColor.RED: (255, 0, 0),
+                PieceColor.GREEN: (0, 255, 0),
+                PieceColor.BLUE: (0, 0, 255),
+                PieceColor.YELLOW: (255, 255, 0)
+            }
+            color = color_map.get(piece.color, (255, 255, 255))
+            
+            pygame.draw.circle(screen, color, (screen_x, screen_y), 8)
+            
+            # Add border for selected pieces
+            if piece.is_selected:
+                pygame.draw.circle(screen, (255, 255, 255), (screen_x, screen_y), 10, 2)
+                
+        except Exception as e:
+            # Fallback to OpenGL rendering
+            # Enable texturing
+            glEnable(GL_TEXTURE_2D)
 
-        # Use appropriate texture
-        texture_id = self.textures[piece.color]
+            # Use appropriate texture
+            texture_id = self.textures[piece.color]
 
-        # Draw the piece model
-        self._draw_model(piece.model, screen)
+            # Draw the piece model
+            self._draw_model(piece.model, screen)
 
         # Update piece animation
         piece.update_animation()
