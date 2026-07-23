@@ -572,32 +572,38 @@ class Board:
         Args:
             screen: The rendering surface
         """
-        # Enable texturing
-        # pyrefly: ignore [unknown-name]
-        glEnable(GL_TEXTURE_2D)
+        # Try OpenGL rendering first
+        try:
+            from OpenGL.GL import glEnable, glBegin, glEnd, glColor4f, glVertex3f, glLineWidth, glColor3f, GL_TEXTURE_2D, GL_QUADS, GL_POINTS
+            
+            # Enable texturing
+            glEnable(GL_TEXTURE_2D)
 
-        # Draw floor
-        glBegin(GL_QUADS)
-        for i in range(0, len(self.indices), 6):
-            for j in range(6):
-                idx = self.indices[i + j]
-                glColor4f(*self.colors[idx])
-                glVertex3f(*self.vertices[idx])
-        glEnd()
+            # Draw floor
+            glBegin(GL_QUADS)
+            for i in range(0, len(self.indices), 6):
+                for j in range(6):
+                    idx = self.indices[i + j]
+                    glColor4f(*self.colors[idx])
+                    glVertex3f(*self.vertices[idx])
+            glEnd()
 
-        # Draw path outlines
-        glLineWidth(2.0)
-        glColor3f(0.2, 0.2, 0.2)  # Dark gray paths
+            # Draw path outlines
+            glLineWidth(2.0)
+            glColor3f(0.2, 0.2, 0.2)  # Dark gray paths
 
-        # Draw track paths based on board type
-        if self.board_type == BoardType.CLASSIC:
-            self._render_classic_path(screen)
-        elif self.board_type == BoardType.CIRCULAR:
-            self._render_circular_path(screen)
-        elif self.board_type == BoardType.HEXAGONAL:
-            self._render_hexagonal_path(screen)
-        elif self.board_type == BoardType.TRIANGULAR:
-            self._render_triangular_path(screen)
+            # Draw track paths based on board type
+            if self.board_type == BoardType.CLASSIC:
+                self._render_classic_path(screen)
+            elif self.board_type == BoardType.CIRCULAR:
+                self._render_circular_path(screen)
+            elif self.board_type == BoardType.HEXAGONAL:
+                self._render_hexagonal_path(screen)
+            elif self.board_type == BoardType.TRIANGULAR:
+                self._render_triangular_path(screen)
+        except (ImportError, Exception):
+            # Fallback to 2D pygame rendering
+            self._render_2d(screen)
 
     def _render_classic_path(self, screen) -> None:
         """Render classic board paths."""
@@ -708,4 +714,33 @@ class Board:
         elif pos_info['special_effect'] == 'snake':
             return (0.2, 0.2, 0.8)  # Blue for snake
         else:
-            return (0.7, 0.7, 0.7)  # Default gray
+            return (0.7, 0.7, 0.7)  # Default light gray
+
+    def _render_2d(self, screen) -> None:
+        """Render board in 2D using pygame."""
+        try:
+            import pygame
+            # Draw a simple grid representation of the board
+            cell_size = 30
+            offset_x = 50
+            offset_y = 50
+            
+            # Draw positions as colored rectangles
+            for pos_id, pos_info in self.positions.items():
+                track = pos_info['track']
+                index = pos_info['index']
+                coords = pos_info['coordinates']
+                
+                # Map track and index to screen position
+                x = offset_x + (index * cell_size) + (track * 15)
+                y = offset_y + (track * cell_size)
+                
+                # Get color based on position type
+                color = self._get_position_color(pos_info)
+                color_int = tuple(int(c * 255) for c in color)
+                
+                # Draw rectangle for position
+                pygame.draw.rect(screen, color_int, (x, y, cell_size - 2, cell_size - 2))
+                
+        except Exception as e:
+            print(f"Error in 2D board rendering: {e}")
