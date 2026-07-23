@@ -46,30 +46,40 @@ class Main:
             graphics_config = self.config.get_graphics_config()
             width = graphics_config.get('window_width', 800)
             height = graphics_config.get('window_height', 600)
-            self.screen = pygame.display.set_mode((width, height), pygame.OPENGL | pygame.DOUBLEBUF)
+            
+            # Try OpenGL first, fall back to 2D if it fails
+            try:
+                self.screen = pygame.display.set_mode((width, height), pygame.OPENGL | pygame.DOUBLEBUF)
+                self.use_opengl = True
+            except pygame.error:
+                # Fall back to 2D rendering
+                self.screen = pygame.display.set_mode((width, height))
+                self.use_opengl = False
+                print("OpenGL not available, using 2D rendering")
 
-            # Initialize OpenGL viewport and projection
-            from OpenGL.GL import glViewport, glEnable, glClearColor, glClearDepth, GL_DEPTH_TEST
-            from OpenGL.GLU import gluPerspective
-            glViewport(0, 0, width, height)
-            glEnable(GL_DEPTH_TEST)
-            glClearColor(0.1, 0.1, 0.1, 1.0)  # Dark gray background
-            glClearDepth(1.0)
-            
-            # Set up projection matrix
-            from OpenGL.GL import glMatrixMode, glLoadIdentity, GL_PROJECTION, GL_MODELVIEW
-            from OpenGL.GLU import gluPerspective
-            glMatrixMode(GL_PROJECTION)
-            glLoadIdentity()
-            gluPerspective(45, width / height, 0.1, 100.0)
-            
-            # Set up modelview matrix
-            glMatrixMode(GL_MODELVIEW)
-            glLoadIdentity()
-            from OpenGL.GLU import gluLookAt
-            gluLookAt(0, 20, 20,  # Camera position
-                     0, 0, 0,     # Look at origin
-                     0, 1, 0)     # Up vector
+            # Initialize OpenGL viewport and projection (only if OpenGL is available)
+            if self.use_opengl:
+                from OpenGL.GL import glViewport, glEnable, glClearColor, glClearDepth, GL_DEPTH_TEST
+                from OpenGL.GLU import gluPerspective
+                glViewport(0, 0, width, height)
+                glEnable(GL_DEPTH_TEST)
+                glClearColor(0.1, 0.1, 0.1, 1.0)  # Dark gray background
+                glClearDepth(1.0)
+                
+                # Set up projection matrix
+                from OpenGL.GL import glMatrixMode, glLoadIdentity, GL_PROJECTION, GL_MODELVIEW
+                from OpenGL.GLU import gluPerspective
+                glMatrixMode(GL_PROJECTION)
+                glLoadIdentity()
+                gluPerspective(45, width / height, 0.1, 100.0)
+                
+                # Set up modelview matrix
+                glMatrixMode(GL_MODELVIEW)
+                glLoadIdentity()
+                from OpenGL.GLU import gluLookAt
+                gluLookAt(0, 20, 20,  # Camera position
+                         0, 0, 0,     # Look at origin
+                         0, 1, 0)     # Up vector
 
             # Initialize game
             if not self.initialize():
@@ -202,10 +212,13 @@ class Main:
         if not self.game or not self.screen:
             return
 
-        from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear
-
-        # Clear the screen
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        # Clear the screen based on rendering mode
+        if self.use_opengl:
+            from OpenGL.GL import GL_COLOR_BUFFER_BIT, GL_DEPTH_BUFFER_BIT, glClear
+            glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT)
+        else:
+            # 2D rendering - fill with dark gray
+            self.screen.fill((25, 25, 25))
 
         # Render game
         self.game.render(self.screen)

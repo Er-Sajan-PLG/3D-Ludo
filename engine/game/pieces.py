@@ -524,11 +524,16 @@ class Pieces:
         try:
             import pygame
             # Get piece position coordinates from board
-            pos_coords = piece.board.get_position_coordinates(piece.position) if piece.board else (0, 0, 0)
-            
-            # Convert to screen coordinates - matching board rendering
-            screen_x = int((pos_coords[0] + 2) * 40 + 407)  # Centered in cell
-            screen_y = int((pos_coords[2] + 2) * 40 + 307)  # Centered in cell
+            # Use global board reference since pieces don't store board reference
+            from engine.game import board as board_module
+            # Create a temporary board instance or use cached positions
+            # For now, calculate position directly
+            pos_index = piece.position
+            # Simple grid layout for visualization
+            row = pos_index // 15
+            col = pos_index % 15
+            screen_x = 100 + col * 40
+            screen_y = 100 + row * 40
             
             # Draw piece as colored circle based on player color
             color_map = {
@@ -548,15 +553,6 @@ class Pieces:
                 
         except Exception as e:
             print(f"Error rendering piece: {e}")
-            # Fallback to OpenGL rendering
-            # Enable texturing
-            glEnable(GL_TEXTURE_2D)
-
-            # Use appropriate texture
-            texture_id = self.textures[piece.color]
-
-            # Draw the piece model
-            self._draw_model(piece.model, screen)
 
         # Update piece animation
         piece.update_animation()
